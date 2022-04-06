@@ -12,6 +12,8 @@ FluidSim::FluidSim(int width, int height, int cellSize)
     {
         for(int j = 0; j < height; ++j)
         {
+            cells[i+j*width] = Empty;
+
             sf::Vertex* quad = &vertices[(i+j*width)*4];
 
             // Top left
@@ -29,6 +31,7 @@ FluidSim::FluidSim(int width, int height, int cellSize)
 void FluidSim::Simulate()
 {
     // Simulate particles
+    /*
     for(int i = 0; i < width; ++i)
     {
         for(int j = 0; j < height; ++j)
@@ -37,8 +40,9 @@ void FluidSim::Simulate()
             auto c = cells[i+j*width];
         };
     }
+    */
 
-    // Update World
+    // Update cells
     for(int i = 0; i < width; ++i)
     {
         for(int j = 0; j < height; ++j)
@@ -47,9 +51,39 @@ void FluidSim::Simulate()
             auto c = cells[i+j*width];
             sf::Vertex* quad = &vertices[(i+j*width)*4];
 
-            // Color tile
+            // Color cell
+            quad[0].color = quad[1].color = quad[2].color = quad[3].color = c.color;
         };
     }
+};
+
+void FluidSim::SetCell(int x, int y, CellType c)
+{
+    if(ValidCell(x, y))
+    {
+        Cell& cell = cells[x+y*width];
+
+        switch(c)
+        {
+            case CellType::Sand:
+            {
+                cell = Sand;
+                break;
+            };
+            case CellType::Empty:
+            {
+                cell = Empty;
+                break;
+            };
+        };
+    };
+};
+
+bool FluidSim::ValidCell(int x, int y)
+{
+    if((x >= 0 && x < width) && (y >= 0 && y < height))
+        return true;
+    return false;
 };
 
 void FluidSim::draw(sf::RenderTarget& rTarget, sf::RenderStates rStates) const

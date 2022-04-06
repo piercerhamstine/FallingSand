@@ -6,9 +6,11 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(200, 200), "Particles");
 
-    FluidSim f(199, 50, 1);
+    FluidSim f(100, 100, 1);
+
+    f.SetCell(50, 50, CellType::Sand);
 
     while (window.isOpen())
     {
@@ -18,6 +20,8 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
+        f.Simulate();
 
         window.clear();
         window.draw(f);
