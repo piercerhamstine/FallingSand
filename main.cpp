@@ -8,7 +8,7 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 
-    FluidSim f(50, 50);
+    FluidSim f(199, 50, 1);
 
     while (window.isOpen())
     {
@@ -18,8 +18,6 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
-        f.Simulate();
 
         window.clear();
         window.draw(f);
