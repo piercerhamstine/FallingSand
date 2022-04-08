@@ -29,11 +29,15 @@ public:
 private:
     virtual void draw(sf::RenderTarget& rTarget, sf::RenderStates rStates) const;
 
+    void MoveCell(int x, int y, int dx, int dy);
+
+    // Returns the cell index at specified X and Y values.
+    int GetIndex(int x, int y);
     // Returns if we are within the bounds of the world.
     bool ValidCellBounds(int x, int y);
     // Returns if the cell is empty.
     bool EmptyCell(int x, int y);
-    
+
     int width;
     int height;
 

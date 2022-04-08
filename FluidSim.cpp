@@ -12,7 +12,7 @@ FluidSim::FluidSim(int width, int height, int cellSize)
     {
         for(int j = 0; j < height; ++j)
         {
-            cells[i+j*width] = Empty;
+            cells[GetIndex(i,j)] = Empty;
 
             sf::Vertex* quad = &vertices[(i+j*width)*4];
 
@@ -28,6 +28,16 @@ FluidSim::FluidSim(int width, int height, int cellSize)
     };
 };
 
+void FluidSim::MoveCell(int x, int y, int dx, int dy)
+{
+
+};
+
+int FluidSim::GetIndex(int x, int y)
+{
+    return (x+y*width);
+}
+
 void FluidSim::Simulate()
 {
     // Simulate particles
@@ -36,7 +46,7 @@ void FluidSim::Simulate()
         for(int j = 0; j < height; ++j)
         {
             // Get Cell
-            Cell& c = cells[i+j*width];
+            Cell& c = cells[GetIndex(i,j)];
 
             // Quick implementation 
             if(c.type == CellType::Sand)
@@ -44,8 +54,7 @@ void FluidSim::Simulate()
                 // move down
                 if(ValidCellBounds(i, j+1) && EmptyCell(i, j+1))
                 {
-                    SetCell(i, j, CellType::Empty);
-                    SetCell(i, j+1, CellType::Sand);
+                    // Fix
                 };
                 //if not then move left
                 //if not then move right.
@@ -54,14 +63,14 @@ void FluidSim::Simulate()
             //
         };
     };
-
+    
     // Update cells
     for(int i = 0; i < width; ++i)
     {
         for(int j = 0; j < height; ++j)
         {
             // Get Cell
-            auto c = cells[i+j*width];
+            auto c = cells[GetIndex(i, j)];
             sf::Vertex* quad = &vertices[(i+j*width)*4];
 
             // Color cell
@@ -74,7 +83,7 @@ void FluidSim::SetCell(int x, int y, CellType c)
 {
     if(ValidCellBounds(x, y))
     {
-        Cell& cell = cells[x+y*width];
+        Cell& cell = cells[GetIndex(x,y)];
 
         switch(c)
         {
@@ -101,7 +110,7 @@ bool FluidSim::ValidCellBounds(int x, int y)
 
 bool FluidSim::EmptyCell(int x, int y)
 {
-    Cell& cell = cells[x+y*width];
+    Cell& cell = cells[GetIndex(x,y)];
     if(cell.type == CellType::Empty)
         return true;
     return false;

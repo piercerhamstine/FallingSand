@@ -7,13 +7,16 @@
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(200, 200), "Particles");
-
+    sf::Clock clock;
     FluidSim f(100, 100, 1);
 
-    f.SetCell(0, 0, CellType::Sand);
-
+    sf::Time totalTime;
+    sf::Time timeSinceLastFrame;
     while (window.isOpen())
     {
+        timeSinceLastFrame = clock.restart();
+        totalTime += timeSinceLastFrame;
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -21,7 +24,7 @@ int main()
                 window.close();
         }
 
-        f.Simulate();
+        f.Simulate();        
 
         window.clear();
         window.draw(f);
