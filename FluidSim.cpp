@@ -31,16 +31,29 @@ FluidSim::FluidSim(int width, int height, int cellSize)
 void FluidSim::Simulate()
 {
     // Simulate particles
-    /*
     for(int i = 0; i < width; ++i)
     {
         for(int j = 0; j < height; ++j)
         {
             // Get Cell
-            auto c = cells[i+j*width];
+            Cell& c = cells[i+j*width];
+
+            // Quick implementation 
+            if(c.type == CellType::Sand)
+            {
+                // move down
+                if(ValidCellBounds(i, j+1) && EmptyCell(i, j+1))
+                {
+                    SetCell(i, j, CellType::Empty);
+                    SetCell(i, j+1, CellType::Sand);
+                };
+                //if not then move left
+                //if not then move right.
+
+            };
+            //
         };
-    }
-    */
+    };
 
     // Update cells
     for(int i = 0; i < width; ++i)
@@ -59,7 +72,7 @@ void FluidSim::Simulate()
 
 void FluidSim::SetCell(int x, int y, CellType c)
 {
-    if(ValidCell(x, y))
+    if(ValidCellBounds(x, y))
     {
         Cell& cell = cells[x+y*width];
 
@@ -79,9 +92,17 @@ void FluidSim::SetCell(int x, int y, CellType c)
     };
 };
 
-bool FluidSim::ValidCell(int x, int y)
+bool FluidSim::ValidCellBounds(int x, int y)
 {
     if((x >= 0 && x < width) && (y >= 0 && y < height))
+        return true;
+    return false;
+};
+
+bool FluidSim::EmptyCell(int x, int y)
+{
+    Cell& cell = cells[x+y*width];
+    if(cell.type == CellType::Empty)
         return true;
     return false;
 };

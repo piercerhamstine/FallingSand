@@ -10,7 +10,7 @@ int main()
 
     FluidSim f(100, 100, 1);
 
-    f.SetCell(50, 50, CellType::Sand);
+    f.SetCell(0, 0, CellType::Sand);
 
     while (window.isOpen())
     {

@@ -29,8 +29,11 @@ public:
 private:
     virtual void draw(sf::RenderTarget& rTarget, sf::RenderStates rStates) const;
 
-    bool ValidCell(int x, int y);
-
+    // Returns if we are within the bounds of the world.
+    bool ValidCellBounds(int x, int y);
+    // Returns if the cell is empty.
+    bool EmptyCell(int x, int y);
+    
     int width;
     int height;
 
