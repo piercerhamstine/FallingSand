@@ -8,12 +8,14 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(200, 200), "Particles");
     sf::Clock clock;
-    FluidSim f(100, 100, 1);
+    FluidSim f(200, 200, 1);
 
     //f.SetCell(10,0, CellType::Sand);
 
     sf::Time totalTime;
     sf::Time timeSinceLastFrame;
+
+    CellType currType = CellType::Sand;
     while (window.isOpen())
     {
         timeSinceLastFrame = clock.restart();
@@ -25,12 +27,21 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            /*
-            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num1)
             {
-                f.SetCell(10,0, CellType::Sand);
-            }*/
+                currType = CellType::Sand;
+            }
+            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num2)
+            {
+                currType = CellType::Water;
+            }
         }
+
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            sf::Vector2i pos = sf::Mouse::getPosition(window);
+            f.SetCell(pos.x, pos.y, currType);
+        };
 
         f.Simulate();        
 

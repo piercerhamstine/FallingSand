@@ -42,20 +42,20 @@ void FluidSim::Simulate()
             Cell& c = cells[GetIndex(i,j)];
 
             // Quick implementation 
-            if(c.type == CellType::Sand)
+            if(c.type == CellType::Sand || c.type == CellType::Water)
             {
                 // move down
-                if(ValidCellBounds(i, j+1) && EmptyCell(i, j+1))
+                if(ValidCellBounds(i, j+1) && (EmptyCell(i, j+1) || c.density > cells[GetIndex(i, j+1)].density))
                 {
                     cellMoves.emplace_back(GetIndex(i, j), GetIndex(i, j+1));
                 }
                 //if not then move down left
-                else if(ValidCellBounds(i-1, j+1) && EmptyCell(i-1, j+1))
+                else if(ValidCellBounds(i-1, j+1) && (EmptyCell(i-1, j+1) || c.density > cells[GetIndex(i-1, j+1)].density))
                 {
                     cellMoves.emplace_back(GetIndex(i, j), GetIndex(i-1, j+1));
                 }
                 //if not then move down right.
-                else if(ValidCellBounds(i+1, j+1) && EmptyCell(i+1, j+1))
+                else if(ValidCellBounds(i+1, j+1) && (EmptyCell(i+1, j+1) || c.density > cells[GetIndex(i+1, j+1)].density))
                 {
                     cellMoves.emplace_back(GetIndex(i, j), GetIndex(i+1, j+1));
                 }
@@ -101,6 +101,11 @@ void FluidSim::SetCell(int x, int y, CellType c)
             case CellType::Sand:
             {
                 cell = Sand;
+                break;
+            };
+            case CellType::Water:
+            {
+                cell = Water;
                 break;
             };
             case CellType::Empty:
