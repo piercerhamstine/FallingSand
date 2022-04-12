@@ -3,6 +3,8 @@
 
 #include "SFML/Graphics.hpp"
 
+#include <vector>
+#include <utility>
 #include <iostream>
 
 enum class CellType
@@ -29,8 +31,7 @@ public:
 private:
     virtual void draw(sf::RenderTarget& rTarget, sf::RenderStates rStates) const;
 
-    void MoveCell(int x, int y, int dx, int dy);
-
+    void SwapCells(int ndxa, int ndxb);
     // Returns the cell index at specified X and Y values.
     int GetIndex(int x, int y);
     // Returns if we are within the bounds of the world.
@@ -42,6 +43,8 @@ private:
     int height;
 
     sf::VertexArray vertices;
+
+    std::vector<std::pair<int,int>> cellMoves;
 
     Cell* cells;
     Cell Sand={CellType::Sand, sf::Color(237,223,28)};

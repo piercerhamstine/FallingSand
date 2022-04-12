@@ -10,6 +10,8 @@ int main()
     sf::Clock clock;
     FluidSim f(100, 100, 1);
 
+    //f.SetCell(10,0, CellType::Sand);
+
     sf::Time totalTime;
     sf::Time timeSinceLastFrame;
     while (window.isOpen())
@@ -22,6 +24,12 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            /*
+            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
+                f.SetCell(10,0, CellType::Sand);
+            }*/
         }
 
         f.Simulate();        

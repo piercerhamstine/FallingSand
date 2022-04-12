@@ -28,11 +28,6 @@ FluidSim::FluidSim(int width, int height, int cellSize)
     };
 };
 
-void FluidSim::MoveCell(int x, int y, int dx, int dy)
-{
-
-};
-
 int FluidSim::GetIndex(int x, int y)
 {
     return (x+y*width);
@@ -40,12 +35,10 @@ int FluidSim::GetIndex(int x, int y)
 
 void FluidSim::Simulate()
 {
-    // Simulate particles
     for(int i = 0; i < width; ++i)
     {
         for(int j = 0; j < height; ++j)
         {
-            // Get Cell
             Cell& c = cells[GetIndex(i,j)];
 
             // Quick implementation 
@@ -54,29 +47,47 @@ void FluidSim::Simulate()
                 // move down
                 if(ValidCellBounds(i, j+1) && EmptyCell(i, j+1))
                 {
-                    // Fix
-                };
-                //if not then move left
-                //if not then move right.
-
+                    cellMoves.emplace_back(GetIndex(i, j), GetIndex(i, j+1));
+                }
+                //if not then move down left
+                else if(ValidCellBounds(i-1, j+1) && EmptyCell(i-1, j+1))
+                {
+                    cellMoves.emplace_back(GetIndex(i, j), GetIndex(i-1, j+1));
+                }
+                //if not then move down right.
+                else if(ValidCellBounds(i+1, j+1) && EmptyCell(i+1, j+1))
+                {
+                    cellMoves.emplace_back(GetIndex(i, j), GetIndex(i+1, j+1));
+                }
             };
             //
         };
     };
     
+    for(int i = 0; i < cellMoves.size(); ++i)
+    {
+        SwapCells(cellMoves[i].first, cellMoves[i].second);
+    }
+    cellMoves.clear();
+
     // Update cells
     for(int i = 0; i < width; ++i)
     {
         for(int j = 0; j < height; ++j)
         {
-            // Get Cell
             auto c = cells[GetIndex(i, j)];
             sf::Vertex* quad = &vertices[(i+j*width)*4];
 
-            // Color cell
             quad[0].color = quad[1].color = quad[2].color = quad[3].color = c.color;
         };
     }
+};
+
+void FluidSim::SwapCells(int ndxa, int ndxb)
+{
+    auto temp = cells[ndxb];
+    cells[ndxb] = cells[ndxa];
+    cells[ndxa] = temp;
 };
 
 void FluidSim::SetCell(int x, int y, CellType c)
