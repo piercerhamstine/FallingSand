@@ -10,6 +10,7 @@
 enum class CellType
 {
     Empty,
+    Stone,
     Sand,
     Water
 };
@@ -18,7 +19,7 @@ struct Cell
 {
     CellType type;
     sf::Color color;
-    int density = 0;
+    short density = 0;
 };
 
 class FluidSim : public sf::Drawable
@@ -49,6 +50,7 @@ private:
     std::vector<std::pair<int,int>> cellMoves;
 
     Cell* cells;
+    Cell Stone={CellType::Stone, sf::Color(130, 130, 130), 2};
     Cell Sand={CellType::Sand, sf::Color(237,223,28), 1};
     Cell Water={CellType::Water, sf::Color(54,168,255)};
     Cell Empty={CellType::Empty, sf::Color(0,0,0)};

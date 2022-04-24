@@ -39,31 +39,40 @@ void FluidSim::Simulate()
     {
         for(int j = 0; j < height; ++j)
         {
-            Cell& c = cells[GetIndex(i,j)];
+            int currNdx = GetIndex(i,j);
+            Cell& c = cells[currNdx];
 
             // Quick implementation 
-            if(c.type == CellType::Sand || c.type == CellType::Water)
+            if(c.type == CellType::Sand)
             {
                 // move down
                 if(ValidCellBounds(i, j+1) && (EmptyCell(i, j+1) || c.density > cells[GetIndex(i, j+1)].density))
                 {
-                    cellMoves.emplace_back(GetIndex(i, j), GetIndex(i, j+1));
+                    cellMoves.emplace_back(currNdx, GetIndex(i, j+1));
                 }
-                //if not then move down left
-                else if(ValidCellBounds(i-1, j+1) && (EmptyCell(i-1, j+1) || c.density > cells[GetIndex(i-1, j+1)].density))
+                else
                 {
-                    cellMoves.emplace_back(GetIndex(i, j), GetIndex(i-1, j+1));
+                    short dir = rand() % 2;
+
+                    //if not then move down left
+                    if(dir > 0 && ValidCellBounds(i-1, j+1) && (EmptyCell(i-1, j+1) || c.density > cells[GetIndex(i-1, j+1)].density))
+                    {
+                        cellMoves.emplace_back(currNdx, GetIndex(i-1, j+1));
+                    }
+                    //if not then move down right.
+                    else if(ValidCellBounds(i+1, j+1) && (EmptyCell(i+1, j+1) || c.density > cells[GetIndex(i+1, j+1)].density))
+                    {
+                        cellMoves.emplace_back(currNdx, GetIndex(i+1, j+1));
+                    }
                 }
-                //if not then move down right.
-                else if(ValidCellBounds(i+1, j+1) && (EmptyCell(i+1, j+1) || c.density > cells[GetIndex(i+1, j+1)].density))
-                {
-                    cellMoves.emplace_back(GetIndex(i, j), GetIndex(i+1, j+1));
-                }
+
             };
             //
         };
     };
     
+    //1std::sort(cellMoves.begin(), cellMoves.end(), [](auto& f, auto& s){return f.second < s.second;});
+
     for(int i = 0; i < cellMoves.size(); ++i)
     {
         SwapCells(cellMoves[i].first, cellMoves[i].second);
@@ -98,6 +107,11 @@ void FluidSim::SetCell(int x, int y, CellType c)
 
         switch(c)
         {
+            case CellType::Stone:
+            {
+                cell = Stone;
+                break;
+            }
             case CellType::Sand:
             {
                 cell = Sand;

@@ -10,10 +10,11 @@ int main()
     sf::Clock clock;
     FluidSim f(200, 200, 1);
 
-    //f.SetCell(10,0, CellType::Sand);
+    f.SetCell(10,0, CellType::Sand);
 
     sf::Time totalTime;
     sf::Time timeSinceLastFrame;
+
 
     CellType currType = CellType::Sand;
     while (window.isOpen())
@@ -34,6 +35,10 @@ int main()
             if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num2)
             {
                 currType = CellType::Water;
+            }
+            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num3)
+            {
+                currType = CellType::Stone;
             }
         }
 
